@@ -78,6 +78,38 @@
             background-color: rgba(224, 231, 231, 0.8);
             border-radius: 5px;
         }
+
+        /* 반응형 글자 크기 */
+        .responsive-text {
+            font-size: 0.8rem;
+        }
+        
+        @media (min-width: 576px) {
+            .responsive-text {
+                font-size: 0.6rem;
+            }
+        }
+        @media (min-width: 768px) {
+            .responsive-text {
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .responsive-text {
+                font-size: 0.6rem;
+            }
+        }
+        @media (min-width: 1200px) {
+            .responsive-text {
+                font-size: 0.8rem;
+            }
+        }
+        .info_body{
+            padding: 10px 5px;
+            background-color: rgba(149, 159, 159, 0.8);
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -89,14 +121,8 @@
             <img class="logo-img" src="{{ url_for('static', filename='images/logo/logo4.jpg') }}" alt="Logo">
             <img class="logo-img" src="{{ url_for('static', filename='images/logo/logo5.jpg') }}" alt="Logo">
         </div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Add the search form -->
-                <div class="mx-auto my-4 my-lg-2">
-                    <p class="lead text-center">
+                    <p class="lead text-center responsive-text info_body">
                         이 웹페이지는 분양 및 입양에 도움을 드리기 위해 만들어졌습니다.
                         <br>
                         분양가와 추가금을 미리 확인하고 원활한 입양 절차를 진행하세요.
@@ -105,14 +131,11 @@
                         <br>
                         <span class="text-danger">※ 본 웹페이지는 실제 분양 및 입양과 무관합니다.</span>
                     </p>
-                </div>
-            </div>
-        </nav>
     </header>
     <main class="container">
         <div class="row">
             {% for animal in animals %}
-            <div class="col-md-4 mb-4">
+            <div class="col-6 col-sm-6 col-md-4 mb-4">
                 <div class="card">
                     {% if animal['ani_thumnail'] %}
                         <img src="{{ url_for('static', filename='pet_image/' + animal['ani_thumnail']) }}" class="card-img-top" alt="{{ animal['ani_name'] }}">
@@ -129,8 +152,8 @@
                         <div class="status-badge d-none"></div>
                     {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title">{{ animal['ani_name'] }}</h5>
-                        <p class="card-text">
+                        <h5 class="card-title responsive-text">{{ animal['ani_name'] }}</h5>
+                        <p class="card-text responsive-text">
                             {% if animal['ani_age'] %}<span class="fw-bold bodycard">나이</span> {{ animal['ani_age'] }}<br>{% endif %}
                             {% if animal['ani_gender'] %}<span class="fw-bold bodycard">성별</span> {% if animal['ani_gender'] == 1 %}Male{% else %}Female{% endif %}<br>{% endif %}
                             {% if animal['ani_kind'] %}<span class="fw-bold bodycard">품종</span> {{ animal['ani_kind'] }}<br>{% endif %}
