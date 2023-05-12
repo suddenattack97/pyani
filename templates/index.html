@@ -1,0 +1,182 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mpet</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .row{
+            margin-top: 10px;
+        }
+        .logo-container {
+            height: 400px;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+    
+        .logo-img {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            -webkit-transition: opacity 1s, transform 1s;
+            -moz-transition: opacity 1s, transform 1s;
+            -o-transition: opacity 1s, transform 1s;
+            transition: opacity 1s, transform 1s;
+            transform: translateX(-100%);
+        }
+    
+        .logo-img.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 5px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .card-text {
+            font-size: 0.9rem;
+            color: #343a40;
+            padding: 5px 5px;
+            background-color: rgba(224, 231, 231, 0.8);
+            border-radius: 5px;
+        }
+        .card-text span{
+            font-size: 0.9rem;
+            color: #6c757d;
+            padding: 1px 5px;
+            background-color: rgba(253,233, 255, 0.8);
+            border-radius: 5px;
+        }
+        .card-text .krw-format{
+            font-size: 0.9rem;
+            color: #6c757d;
+            padding: 1px 5px;
+            background-color: rgba(224, 231, 231, 0.8);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="logo" class="logo-container">
+            <img class="logo-img" src="{{ url_for('static', filename='images/logo/logo1.jpg') }}" alt="Logo">
+            <img class="logo-img" src="{{ url_for('static', filename='images/logo/logo2.jpg') }}" alt="Logo">
+            <img class="logo-img" src="{{ url_for('static', filename='images/logo/logo3.jpg') }}" alt="Logo">
+            <img class="logo-img" src="{{ url_for('static', filename='images/logo/logo4.jpg') }}" alt="Logo">
+            <img class="logo-img" src="{{ url_for('static', filename='images/logo/logo5.jpg') }}" alt="Logo">
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Add the search form -->
+                <div class="mx-auto my-4 my-lg-2">
+                    <p class="lead text-center">
+                        이 웹페이지는 분양 및 입양에 도움을 드리기 위해 만들어졌습니다.
+                        <br>
+                        분양가와 추가금을 미리 확인하고 원활한 입양 절차를 진행하세요.
+                        <br>
+                        등록된 동물을 분양 받고 싶다면 010-8000-6538로 연락주세요.
+                        <br>
+                        <span class="text-danger">※ 본 웹페이지는 실제 분양 및 입양과 무관합니다.</span>
+                    </p>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="container">
+        <div class="row">
+            {% for animal in animals %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    {% if animal['ani_thumnail'] %}
+                        <img src="{{ url_for('static', filename='pet_image/' + animal['ani_thumnail']) }}" class="card-img-top" alt="{{ animal['ani_name'] }}">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='pet_image/default.jpg') }}" class="card-img-top" alt="{{ animal['ani_name'] }}">
+                    {% endif %}
+                    {% if animal['status'] == 0 %}
+                        <div class="status-badge bg-skyblue">분양 중</div>
+                    {% elif animal['status'] == 1 %}
+                        <div class="status-badge bg-success">분양 완료</div>
+                    {% elif animal['status'] == 2 %}
+                        <div class="status-badge d-none">숨김</div>
+                    {% else %}
+                        <div class="status-badge d-none"></div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ animal['ani_name'] }}</h5>
+                        <p class="card-text">
+                            {% if animal['ani_age'] %}<span class="fw-bold bodycard">나이</span> {{ animal['ani_age'] }}<br>{% endif %}
+                            {% if animal['ani_gender'] %}<span class="fw-bold bodycard">성별</span> {% if animal['ani_gender'] == 1 %}Male{% else %}Female{% endif %}<br>{% endif %}
+                            {% if animal['ani_kind'] %}<span class="fw-bold bodycard">품종</span> {{ animal['ani_kind'] }}<br>{% endif %}
+                            {% if animal['ani_character'] %}<span class="fw-bold bodycard">성격</span> {{ animal['ani_character'] }}<br>{% endif %}
+                            {% if animal['ani_cost'] %}<span class="fw-bold cost">기존 분양비</span> <span class="krw-format">{{ animal['ani_cost'] }}</span><br>{% endif %}
+                            {% if animal['ani_add_cost'] %}<span class="fw-bold cost">추가 분양비</span> <span class="krw-format">{{ animal['ani_add_cost'] }}</span><br>{% endif %}
+                            {% if animal['ani_reg_cost'] %}<span class="fw-bold cost">동물 등록비</span> <span class="krw-format">{{ animal['ani_reg_cost'] }}</span><br>{% endif %}
+                            {% if animal['company'] %}<span class="fw-bold bodycard">업체명</span> {{ animal['company'] }}<br>{% endif %}
+                            {% if animal['ani_sale_license'] %}<span class="fw-bold bodycard">동물판매업허가번호</span> {{ animal['ani_sale_license'] }}{% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+    <footer class="bg-light py-3">
+        <div class="container">
+            <p class="text-center mb-0">&copy; 2023 Mpet. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        (function() {
+            let logoImages = document.getElementsByClassName('logo-img');
+            let currentIndex = 0;
+    
+            function changeLogo() {
+                logoImages[currentIndex].classList.remove('visible');
+                currentIndex = (currentIndex + 1) % logoImages.length;
+                logoImages[currentIndex].classList.add('visible');
+                setTimeout(changeLogo, 2000);
+            }
+    
+            logoImages[currentIndex].classList.add('visible');
+            setTimeout(changeLogo, 2000);
+        })();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const krwFormatElements = document.getElementsByClassName('krw-format');
+            Array.from(krwFormatElements).forEach(function(element) {
+                const value = parseInt(element.textContent);
+                const formattedValue = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value);
+                element.textContent = formattedValue;
+            });
+        });
+    </script>
+
+</body>
+</html>
